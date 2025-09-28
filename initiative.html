@@ -1,0 +1,186 @@
+<html>
+<head>
+  <title>Iniative Tracker</title>
+</head>
+
+<script src="jquery-2.0.3.min.js" language="JavaScript"></script>
+
+<script language="JavaScript">
+var Characters = new Array();
+
+function Character(name, dex)
+{
+  this.name = name;
+  this.dex = dex;
+  this.init = 0;
+  return this;
+}
+
+function initialize()
+{
+  Characters.push(new Character("Elsha (Shelly)", 21));
+  Characters.push(new Character("Shem (John)", 20));
+  Characters.push(new Character("Embregor (Tom F)", 18));
+  Characters.push(new Character("Zaal (Tom Laz)", 17));
+  Characters.push(new Character("Altawulf (Chris)", 15));
+  Characters.push(new Character("Graaver (Scott)", 14));
+  Characters.push(new Character("Ulloo (Greer)", 12));
+  sortCharacters();
+}
+
+function sortCharacters()
+{
+  var x, y;
+  var tempChar = new Character("temp", 0);
+  var numChars = Characters.length;
+
+  for (x = 0; x < numChars - 1; ++x)
+  {
+    for (y = 0; y < numChars - 1 - x; ++y)
+    {
+      if (parseInt(Characters[y].init) < parseInt(Characters[y + 1].init) ||
+          (parseInt(Characters[y].init) == parseInt(Characters[y + 1].init) &&
+           parseInt(Characters[y].dex) < parseInt(Characters[y + 1].dex)))
+      {
+        tempChar = Characters[y];
+        Characters[y] = Characters[y + 1];
+        Characters[y + 1] = tempChar;
+      } // end if and swap
+    }  // end for y
+  } // end for x
+}
+
+function forceResort()
+{
+  sortCharacters();
+  buildList();
+  return false;
+}
+
+function clearInit()
+{
+  if (confirm('Are you sure you want to clear all initiative rolls?'))
+  {
+    var numChars = Characters.length;
+    for (x = 0; x < numChars; ++x)
+    {
+      Characters[x].init = 0;
+    }
+    forceResort();
+  }
+  return false;
+}
+
+function addNewChar()
+{
+  newName = window.prompt("What is the character's name?", "Name");
+  if (newName)
+  {
+    newDex = window.prompt("What is the character's dex?", 12);
+  }
+  if (!newDex)
+  {
+    return false;
+  }
+
+  Characters.push(new Character(newName, newDex));
+
+  forceResort();
+  return false;
+}
+
+function deleteChar(index)
+{
+  if (confirm('Are you sure you want to delete this character?'))
+  {
+    Characters.splice(index, 1);
+    forceResort();
+  }
+  return false;
+}
+
+function updateInit(index)
+{
+  console.log(Characters[index].init);
+  Characters[index].init = $('#char_' + index + 'I').val();
+  console.log(Characters[index].init);
+  return false;
+}
+
+function updateDex(index)
+{
+  Characters[index].dex = $('#char_' + index + 'D').val();
+  return false;
+}
+
+function buildList()
+{
+  var html = '';
+
+  html += '<table cellpadding="3" cellspacing="0" border="1" align="center" id="masterInit">';
+  html += '  <tr>';
+  html += '    <td>&nbsp;</td>';
+  html += '    <th>Name</th>';
+  html += '    <th>Dex</th>';
+  html += '    <th>Initiative</th>';
+  html += '  </tr>';
+
+  $.each(Characters, function(index, ch) {
+    html += '  <tr>';
+    html += '    <td align="center"><input type="button" value="Delete" onClick="top.deleteChar(' + index + ')"></td>';
+    html += '    <td>' + ch.name + '</td>';
+    html += '    <td align="center"><input type="text" size=2 value=' + ch.dex + ' onBlur="top.updateDex(' + index + ')" id="char_' + index + 'D"></td>';
+    html += '    <td align="center"><input type="text" size=2 value=' + ch.init + ' onBlur="top.updateInit(' + index + ')" id="char_' + index + 'I"></td>';
+    html += '  </tr>';
+  });  
+
+  html += '</table>';
+
+  $('#container').html('');
+  $('#container').append(html);
+
+  $('input').keyup(function(e)
+  {
+    if(e.which == 39) {
+     $(this).closest('td').next().find('input').focus().select();
+    }
+    else if(e.which == 37) {
+     $(this).closest('td').prev().find('input').focus().select();
+    }
+    else if(e.which == 40) {
+     $(this).closest('tr').next().find('td:eq('+$(this).closest('td').index()+')').find('input').focus().select();
+    }
+    else if(e.which == 38) {
+     $(this).closest('tr').prev().find('td:eq('+$(this).closest('td').index()+')').find('input').focus().select();
+    }
+  });
+
+  $('#masterInit').find('input').eq(2).focus().select();
+}
+
+function startApp()
+{
+  initialize();
+  buildList();
+}
+
+$(document).ready(function() {
+  startApp();
+});
+
+</script>
+<body>
+
+
+<table cellpadding=0 cellspacing=3 align="center" border="0">
+  <tr>
+    <td><input type="button" onClick="top.clearInit();" value="Clear Initiative Scores"></td>
+    <td><input type="button" onClick="top.forceResort();" value="Resort Action Order"></td>
+    <td><input type="button" onClick="top.addNewChar();" value="Add New Character"></td>
+  </tr>
+</table>
+
+<div id="container" style="text-align: center; margin: auto; padding-top: 20px;"></div>
+
+</body>
+</html>

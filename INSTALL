@@ -1,0 +1,15 @@
+Requirements:
+  Apache 2.2.x or newer
+  PHP 8.3.X or newer
+
+The install process is simple.
+
+Extract the tarball (which you've probably already done if you're reading
+this.)
+
+Copy the directory created to a location inside your DocumentRoot.
+
+If you copy the directory to DocumentRoot/tools/ then point your web
+browser to http://server/tools/ to access the D&D tools.
+
+You're done!
