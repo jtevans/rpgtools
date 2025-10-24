@@ -823,7 +823,7 @@ start_html("John's Dungeons and Dragons Utilities");
 </p>
 
 <p>
-Want to run a local copy of your own D&amp;D Tools? You can <a href="tools-1.8.tar.gz"><b>download them here</b></a>!!! Enjoy<br />
+Want to run a local copy of your own D&amp;D Tools? I have migrated the source code to <a href="https://github.com/jtevans/rpgtools">this GitHub repository</a>.
 PS: The tools have been updated to work with PHP 8. Everything should be backward compatible to PHP 5 as well, but no promises on the older versions of PHP.
 </p>
 
