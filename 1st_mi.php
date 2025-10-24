@@ -204,10 +204,19 @@ foreach ($magic as $type => $amount)
         if ($str === "special")
         {
           $item_data = pull_data("{$specificType}/{$str}");
-          list($page, $special, $intelligent_possible) = explode("~", $item_data);
-          $special = parse_expansions($special);
-          $special .= intelligent_weapon($specificType, $intelligent_possible === 1);
-          array_push($items, new Item($special, $page));
+          if ($specificType === 'weapon')
+          {
+            list($page, $special, $intelligent_possible) = explode("~", $item_data);
+            $special = parse_expansions($special);
+            $special .= intelligent_weapon($specificType, $intelligent_possible === 1);
+            array_push($items, new Item($special, $page));
+          }
+          else // armor
+          {
+            list($page, $special) = explode("~", $item_data);
+            $special = parse_expansions($special);
+            array_push($items, new Item($special, $page));
+          }
         }
         else
         {
